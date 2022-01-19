@@ -13,6 +13,17 @@ class GoodsDetailPage extends StatelessWidget {
       appBar: AppBar(
         title: const Text('商品详情'),
       ),
+      body: Column(
+        children: [
+          ListTile(
+            title: Text(Get.parameters['title'] ?? ''),
+          ),
+          ElevatedButton(
+            onPressed: () {},
+            child: const Text('购买'),
+          ),
+        ],
+      ),
     );
   }
 }

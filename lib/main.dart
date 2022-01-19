@@ -8,12 +8,11 @@ import 'package:getx_demo/shared/logger/logger_utils.dart';
 late Directory appDocsDir;
 
 void main() async {
-
-  runApp(GetMaterialApp.router(
+  runApp(GetMaterialApp(
     debugShowCheckedModeBanner: false,
     enableLog: true,
     logWriterCallback: Logger.write,
-    // initialRoute: AppPages.INITIAL,
+    initialRoute: AppPages.initial,
     getPages: AppPages.routes,
   ));
 }

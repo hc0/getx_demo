@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:getx_demo/page/goods_list/view.dart';
 import 'package:getx_demo/page/main/logic.dart';
+import 'package:getx_demo/routes/app_pages.dart';
 
 import 'logic.dart';
 
@@ -34,7 +34,7 @@ class HomePage extends StatelessWidget {
             ElevatedButton(
               child: const Text('商品列表'),
               onPressed: () {
-                Get.to(GoodsListPage());
+                Get.toNamed(Paths.home + Paths.goodsList);
               },
             ),
           ],

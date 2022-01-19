@@ -9,6 +9,8 @@ abstract class AppRoutes {
   static const shoppingCart = Paths.shoppingCart;
   static const mine = Paths.mine;
 
+  static const login = Paths.login;
+
   static const goodsList = Paths.goodsList;
   static const goodsDetail = Paths.goodsDetail;
   static const orderList = Paths.orderList;
@@ -18,6 +20,7 @@ abstract class AppRoutes {
 
 abstract class Paths {
   static const welcome = '/welcome';
+  static const login = '/login';
 
   static const main = '/main';
   static const home = '/home';

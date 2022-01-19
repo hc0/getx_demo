@@ -13,7 +13,14 @@ class MainPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Obx(
       () => Scaffold(
-        body: body,
+        body: IndexedStack(
+          index: state.currentIndex.value,
+          children: [
+            HomePage(),
+            ShoppingCartPage(),
+            MinePage(),
+          ],
+        ),
         bottomNavigationBar: BottomNavigationBar(
           currentIndex: state.currentIndex.value,
           items: const [
@@ -30,24 +37,9 @@ class MainPage extends StatelessWidget {
               label: '我的',
             ),
           ],
-          onTap: (index) {
-            logic.updateIndex(index);
-          },
+          onTap: logic.updateIndex,
         ),
       ),
     );
-  }
-
-  Widget get body {
-    switch (state.currentIndex.value) {
-      case 0:
-        return HomePage();
-      case 1:
-        return ShoppingCartPage();
-      case 2:
-        return MinePage();
-      default:
-        return HomePage();
-    }
   }
 }
