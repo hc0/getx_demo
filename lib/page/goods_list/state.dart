@@ -1,9 +1,10 @@
 import 'package:get/get.dart';
+import 'package:getx_demo/common/entity/goods.dart';
 
 class GoodsListState {
   GoodsListState() {
     ///Initialize variables
   }
 
-  RxList list = ['we', 'werc', 'asdf', 'vvkwe', 'asdfe'].obs;
+  RxList<Goods> list = <Goods>[].obs;
 }

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:getx_demo/common/routes/app_pages.dart';
 import 'package:getx_demo/page/main/logic.dart';
-import 'package:getx_demo/routes/app_pages.dart';
 
 import 'logic.dart';
 
@@ -22,19 +22,19 @@ class HomePage extends StatelessWidget {
             ElevatedButton(
               child: const Text('购物车'),
               onPressed: () {
-                Get.find<MainLogic>().updateIndex(1);
+                MainLogic.to.updateIndex(1);
               },
             ),
             ElevatedButton(
               child: const Text('我的'),
               onPressed: () {
-                Get.find<MainLogic>().updateIndex(2);
+                MainLogic.to.updateIndex(2);
               },
             ),
             ElevatedButton(
               child: const Text('商品列表'),
               onPressed: () {
-                Get.toNamed(Paths.home + Paths.goodsList);
+                Get.toNamed(Paths.goodsList);
               },
             ),
           ],

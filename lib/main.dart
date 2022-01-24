@@ -1,13 +1,14 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
-import 'package:get/get_navigation/src/root/get_material_app.dart';
-import 'package:getx_demo/routes/app_pages.dart';
-import 'package:getx_demo/shared/logger/logger_utils.dart';
+import 'package:get/get.dart';
+import 'package:getx_demo/common/logger/logger_utils.dart';
+import 'package:getx_demo/common/routes/app_pages.dart';
+import 'package:getx_demo/common/services/global_service.dart';
+import 'package:getx_demo/common/services/user_info_service.dart';
 
-late Directory appDocsDir;
-
+///运行app
 void main() async {
+  await initServices();
+
   runApp(GetMaterialApp(
     debugShowCheckedModeBanner: false,
     enableLog: true,
@@ -15,4 +16,10 @@ void main() async {
     initialRoute: AppPages.initial,
     getPages: AppPages.routes,
   ));
+}
+
+/// 初始化服务
+Future initServices() async {
+  await Get.putAsync(() => GlobalService().init());
+  await Get.putAsync(() => UserInfoService().init());
 }

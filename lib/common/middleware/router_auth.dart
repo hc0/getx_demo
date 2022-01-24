@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
-import 'package:getx_demo/routes/app_pages.dart';
+import 'package:getx_demo/common/routes/app_pages.dart';
+import 'package:getx_demo/common/services/user_info_service.dart';
 
 class RouteAuthMiddleware extends GetMiddleware {
   RouteAuthMiddleware();
 
   @override
   RouteSettings? redirect(String? route) {
-    // 加入 AuthService
-    Future.delayed(
-      const Duration(seconds: 1),
-      () => Get.snackbar("提示", "请先登录APP"),
-    );
+    if (UserInfoService.to.isLogin) {
+      return null;
+      // return RouteSettings(name: route);
+    }
     return const RouteSettings(name: AppRoutes.login);
   }
 }
