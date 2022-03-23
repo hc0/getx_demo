@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:get/get_navigation/src/root/get_material_app.dart';
+import 'package:get/get.dart';
 import 'package:getx_demo/routes/app_pages.dart';
 import 'package:getx_demo/shared/logger/logger_utils.dart';
 
@@ -14,5 +14,12 @@ void main() async {
     logWriterCallback: Logger.write,
     initialRoute: AppPages.initial,
     getPages: AppPages.routes,
+    routingCallback: (Routing? routing) {
+      Logger.write('test routingCallback =${routing?.current}');
+    },
+    builder: (BuildContext context, Widget? child) {
+      Logger.write('test builder =${Get.currentRoute}');
+      return child!;
+    },
   ));
 }

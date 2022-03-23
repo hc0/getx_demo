@@ -16,6 +16,7 @@ abstract class AppRoutes {
   static const orderList = Paths.orderList;
   static const orderDetail = Paths.orderDetail;
   static const setting = Paths.setting;
+  static const screening = Paths.screening;
 }
 
 abstract class Paths {
@@ -32,4 +33,5 @@ abstract class Paths {
   static const orderList = '/orderList';
   static const orderDetail = '/orderDetail';
   static const setting = '/setting';
+  static const screening = '/screening';
 }

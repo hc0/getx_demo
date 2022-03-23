@@ -8,6 +8,4 @@ class MainLogic extends GetxController {
   void updateIndex(int index) {
     state.currentIndex.value = index;
   }
-
-
 }

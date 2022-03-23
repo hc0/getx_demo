@@ -37,6 +37,12 @@ class HomePage extends StatelessWidget {
                 Get.toNamed(Paths.home + Paths.goodsList);
               },
             ),
+            ElevatedButton(
+              child: const Text('筛选功能'),
+              onPressed: () {
+                Get.toNamed(Paths.screening);
+              },
+            ),
           ],
         ),
       ),

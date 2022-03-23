@@ -1,3 +1,4 @@
+import 'package:get/get.dart';
 import 'package:get/get_navigation/src/routes/get_route.dart';
 import 'package:getx_demo/common/middleware/router_auth.dart';
 import 'package:getx_demo/page/goods_detail/view.dart';
