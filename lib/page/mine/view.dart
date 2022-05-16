@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:getx_demo/common/routes/app_pages.dart';
+import 'package:getx_demo/common/routes/app_router_obsever.dart';
 import 'package:getx_demo/common/services/user_info_service.dart';
 import 'package:getx_demo/page/main/logic.dart';
 
@@ -9,6 +10,7 @@ import 'logic.dart';
 class MinePage extends StatelessWidget {
   final logic = Get.put(MineLogic());
   final state = Get.find<MineLogic>().state;
+
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +28,7 @@ class MinePage extends StatelessWidget {
               ElevatedButton(
                 child: const Text('订单列表'),
                 onPressed: () {
-                  Get.toNamed(Paths.orderList);
+                  AppRouter.share.open(Paths.orderList);
                 },
               ),
               ElevatedButton(

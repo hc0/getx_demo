@@ -8,6 +8,8 @@ class LoginPage extends StatelessWidget {
   final logic = Get.put(LoginLogic());
   final state = Get.find<LoginLogic>().state;
 
+  LoginPage({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

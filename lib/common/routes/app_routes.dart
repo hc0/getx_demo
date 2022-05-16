@@ -32,4 +32,10 @@ abstract class Paths {
   static const orderList = '/orderList';
   static const orderDetail = '/orderDetail';
   static const setting = '/setting';
+  static const filter = '/filter';
+  static const page1 = '/page1';
+  static const page2 = '/page2';
+  static const page3 = '/page3';
+  static const state = '/state';
+  static const customView = '/customView';
 }

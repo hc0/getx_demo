@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:getx_demo/common/entity/goods.dart';
 import 'package:getx_demo/common/routes/app_pages.dart';
+import 'package:getx_demo/common/routes/app_router_obsever.dart';
 import 'package:getx_demo/common/values/storage.dart';
 
 /// 用户信息
@@ -144,7 +145,7 @@ class UserInfoService extends GetxService {
       textConfirm: '去登入',
       onConfirm: () {
         Get.back();
-        Get.toNamed(
+        AppRouter.share.open(
           Paths.login,
           arguments: {'successCallback': successCallback},
         );

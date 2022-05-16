@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:getx_demo/common/routes/app_pages.dart';
+import 'package:getx_demo/common/routes/app_router_obsever.dart';
 
 import 'logic.dart';
 
@@ -19,7 +20,7 @@ class ShoppingCartPage extends StatelessWidget {
           title: Text(state.shoppingCart[index].title ?? ''),
           subtitle: Text('${state.shoppingCart[index].id}'),
           onTap: () {
-            Get.toNamed(
+            AppRouter.share.open(
               Paths.goodsDetail,
               arguments: {'bean': logic.state.shoppingCart[index]},
             );
