@@ -4,6 +4,7 @@ import 'package:getx_demo/common/middleware/router_auth.dart';
 import 'package:getx_demo/page/goods_detail/view.dart';
 import 'package:getx_demo/page/goods_list/view.dart';
 import 'package:getx_demo/page/home/view.dart';
+import 'package:getx_demo/page/login/view.dart';
 import 'package:getx_demo/page/main/view.dart';
 import 'package:getx_demo/page/mine/view.dart';
 import 'package:getx_demo/page/order_detail/view.dart';
@@ -26,6 +27,11 @@ class AppPages {
       page: () => WelcomePage(),
     ),
     GetPage(
+      name: Paths.login,
+      preventDuplicates: true, //防止重复
+      page: () => LoginPage(),
+    ),
+    GetPage(
       name: Paths.main,
       preventDuplicates: true, //防止重复
       page: () => MainPage(), //显示页面
@@ -33,18 +39,14 @@ class AppPages {
     GetPage(
       name: Paths.home,
       page: () => HomePage(),
-      children: [
-        GetPage(
-          name: Paths.goodsList,
-          page: () => GoodsListPage(),
-          children: [
-            GetPage(
-              name: Paths.goodsDetail,
-              page: () => GoodsDetailPage(),
-            ),
-          ],
-        ),
-      ],
+    ),
+    GetPage(
+      name: Paths.goodsList,
+      page: () => GoodsListPage(),
+    ),
+    GetPage(
+      name: Paths.goodsDetail,
+      page: () => GoodsDetailPage(),
     ),
     GetPage(
       name: Paths.shoppingCart,
@@ -59,21 +61,26 @@ class AppPages {
       middlewares: [
         RouteAuthMiddleware(),
       ],
-      children: [
-        GetPage(
-          name: Paths.orderList,
-          page: () => OrderListPage(),
-          children: [
-            GetPage(
-              name: Paths.orderDetail,
-              page: () => OrderDetailPage(),
-            ),
-          ],
-        ),
-        GetPage(
-          name: Paths.setting,
-          page: () => SettingPage(),
-        ),
+    ),
+    GetPage(
+      name: Paths.setting,
+      page: () => SettingPage(),
+      middlewares: [
+        RouteAuthMiddleware(),
+      ],
+    ),
+    GetPage(
+      name: Paths.orderList,
+      page: () => OrderListPage(),
+      middlewares: [
+        RouteAuthMiddleware(),
+      ],
+    ),
+    GetPage(
+      name: Paths.orderDetail,
+      page: () => OrderDetailPage(),
+      middlewares: [
+        RouteAuthMiddleware(),
       ],
     ),
   ];

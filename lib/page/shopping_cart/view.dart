@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:getx_demo/common/routes/app_pages.dart';
 
 import 'logic.dart';
 
@@ -11,11 +12,21 @@ class ShoppingCartPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('购物车'),
+        title: const Text('购物车'),
       ),
-      body: Container(
-        alignment: Alignment.center,
-        child: Text('购物车'),
+      body: ListView.separated(
+        itemBuilder: (context, index) => ListTile(
+          title: Text(state.shoppingCart[index].title ?? ''),
+          subtitle: Text('${state.shoppingCart[index].id}'),
+          onTap: () {
+            Get.toNamed(
+              Paths.goodsDetail,
+              arguments: {'bean': logic.state.shoppingCart[index]},
+            );
+          },
+        ),
+        separatorBuilder: (context, index) => const Divider(),
+        itemCount: state.shoppingCart.length,
       ),
     );
   }
