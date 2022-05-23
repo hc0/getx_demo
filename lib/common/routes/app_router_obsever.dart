@@ -11,7 +11,7 @@ String _extractRouteName(Route? route) {
 }
 
 ///路由监听
-class AppRouter extends RouteObserver<Route> {
+class AppRouter extends RouteObserver<Route> with WidgetsBindingObserver{
   //禁止直接实例化
   AppRouter._();
 
@@ -163,5 +163,21 @@ class AppRouter extends RouteObserver<Route> {
   void unsubscribe(RouteAware routeAware) {
     debugPrint('** unsubscribe **');
     super.unsubscribe(routeAware);
+  }
+
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    print('test 00000');
+    super.didChangeAppLifecycleState(state);
+    if (state == AppLifecycleState.resumed) {
+      print('test NavigatorObserver resumed');
+    } else if (state == AppLifecycleState.inactive) {
+      print('test NavigatorObserver inactive');
+    } else if (state == AppLifecycleState.detached) {
+      print('test NavigatorObserver inactive');
+    } else if (state == AppLifecycleState.paused) {
+      print('test NavigatorObserver paused');
+    }
   }
 }
