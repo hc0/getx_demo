@@ -1,5 +1,9 @@
 import 'package:get/get.dart';
 import 'package:getx_demo/common/middleware/router_auth.dart';
+import 'package:getx_demo/page/anchor_scroller/page/custom_anchor_page.dart';
+import 'package:getx_demo/page/anchor_scroller/view.dart';
+import 'package:getx_demo/page/anchor_scroller/page/sliver_page.dart';
+import 'package:getx_demo/page/anchor_scroller/page/anchor_page.dart';
 import 'package:getx_demo/page/custom_view/view.dart';
 import 'package:getx_demo/page/filter/filter_page.dart';
 import 'package:getx_demo/page/goods_detail/view.dart';
@@ -126,6 +130,27 @@ class AppPages {
     GetPage(
       name: Paths.customView,
       page: () => CustomViewPage(),
+      transition: Transition.cupertino,
+    ),
+    //联动列表
+    GetPage(
+      name: Paths.link,
+      page: () => const LinkPage(),
+      transition: Transition.cupertino,
+    ),
+    GetPage(
+      name: Paths.sliver,
+      page: () => const SliverPage(),
+      transition: Transition.cupertino,
+    ),
+    GetPage(
+      name: Paths.anchor,
+      page: () => const TwAnchorPage(),
+      transition: Transition.cupertino,
+    ),
+    GetPage(
+      name: Paths.customAnchor,
+      page: () => const CustomAnchorPage(),
       transition: Transition.cupertino,
     ),
   ];

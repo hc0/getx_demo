@@ -68,6 +68,12 @@ class HomePage extends StatelessWidget {
                 AppRouter.share.open(Paths.customView);
               },
             ),
+            ElevatedButton(
+              child: const Text('联动列表'),
+              onPressed: () {
+                AppRouter.share.open(Paths.link);
+              },
+            ),
           ],
         ),
       ),

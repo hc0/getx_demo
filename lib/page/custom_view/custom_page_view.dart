@@ -32,6 +32,7 @@ class _CustomPageViewState extends State<CustomPageView>
   void initState() {
     itemCount = widget.itemCount;
     super.initState();
+
     WidgetsBinding.instance?.addPostFrameCallback((timeStamp) {
       scrollController.jumpTo(constraints.maxWidth * (itemCount - 1));
     });

@@ -38,4 +38,9 @@ abstract class Paths {
   static const page3 = '/page3';
   static const state = '/state';
   static const customView = '/customView';
+  static const link = '/link';
+  static const sliver = '/sliver';
+  static const anchor = '/anchor';
+  static const customAnchor = '/custom_anchor';
+  static const scrollablePosition = '/scrollable_position';
 }
