@@ -65,7 +65,7 @@ class _LinkAnchorPageState extends State<LinkAnchorPage>
         animationController.value = value;
       },
       positionNotification: (int index) {
-        int tempIndex = index.clamp(0, tabs.length);
+        int tempIndex = index.clamp(0, tabs.length-1);
         tabController.index = tempIndex;
       },
       scrollNotification: (scrollController) {},
@@ -85,7 +85,7 @@ class _LinkAnchorPageState extends State<LinkAnchorPage>
                 Positioned.fill(
                   child: LinkAnchorView(
                     controller: linkAnchorController,
-                    itemCount: 10,
+                    itemCount: 15,
                     build: (BuildContext context, int index) {
                       if (index == 0) {
                         return AnimatedContainer(
@@ -94,7 +94,7 @@ class _LinkAnchorPageState extends State<LinkAnchorPage>
                               ? Colors.primaries[index]
                               : Colors.primaries.reversed.toList()[index],
                           alignment: Alignment.center,
-                          duration: const Duration(milliseconds: 300),
+                          duration: const Duration(milliseconds: 500),
                           child: Text(toggle ? '我是图片' : '我是视频'),
                         );
                       } else if (index == 5) {
@@ -129,11 +129,10 @@ class _LinkAnchorPageState extends State<LinkAnchorPage>
                   titleHeight: titleHeight,
                   tabHeight: tabHeight,
                   shareTap: () {
-                    setState(() {
-                      toggle = !toggle;
-                    });
-                    valueNotifier.value = 400;
-                    linkAnchorController.updateAndCalculate();
+                    toggle = !toggle;
+                    setState(() {});
+                    // valueNotifier.value = 400;
+                    // linkAnchorController.updateAndCalculate();
                   },
                 ),
               ],

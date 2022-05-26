@@ -84,8 +84,16 @@ class _LinkAnchorViewState extends State<LinkAnchorView> {
 
   @override
   void didUpdateWidget(covariant LinkAnchorView oldWidget) {
+    if (oldWidget.controller != widget.controller) {
+      controller = widget.controller ?? LinkAnchorController();
+      controller.reBuildView = reBuildView;
+      controller.itemCount = widget.itemCount;
+    } else if (oldWidget.itemCount != widget.itemCount) {
+      controller.itemCount = widget.itemCount;
+    }
+
     super.didUpdateWidget(oldWidget);
-    controller.updateAndCalculate();
+    controller.updateAndCalculate(didUpdate: true);
   }
 
   void reBuildView() {

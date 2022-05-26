@@ -145,11 +145,6 @@ class LinkAnchorController {
       );
       tempHeight += widgetSize.height;
     }
-
-    widgetPositions.forEach((element) {
-      print(
-          'test begin=${element.begin} end=${element.end} endToScrollEndHeight=${element.endToScrollEndHeight}');
-    });
   }
 
   ///设置初始值
@@ -241,18 +236,31 @@ class LinkAnchorController {
     _scrollLock = false;
   }
 
-  ///更新视图并重新计算(内部控件高度有变化需要重新计算)
-  ///duration：内容控件高度变化可能有动画，在动画结束后在计算
-  void updateAndCalculate({Duration duration = Duration.zero}) {
+  ///更新视图并重新计算
+  ///
+  /// 滚动视图内部控件在局部刷新时，高度有变化 需要[重新计算]
+  ///
+  ///duration：内容控件高度变化可能有动画，延迟是为了在动画结束后在计算
+  void updateAndCalculate({
+    bool didUpdate = false,
+    Duration duration = const Duration(milliseconds: 300),
+  }) {
     //延迟作用：内容控件高度变化可能有动画，在动画结束后在计算
+    if (didUpdate) {
+      _updateAndCalculate();
+    } else {}
     Future.delayed(duration, () {
-      scrollController.removeListener(scrollListener);
-      globalKeys = List.generate(itemCount, (index) => GlobalKey());
-      reBuildView();
-      ambiguate(WidgetsBinding.instance)?.addPostFrameCallback((timeStamp) {
-        getPosition();
-        scrollController.addListener(scrollListener);
-      });
+      _updateAndCalculate();
+    });
+  }
+
+  void _updateAndCalculate() {
+    scrollController.removeListener(scrollListener);
+    globalKeys = List.generate(itemCount, (index) => GlobalKey());
+    reBuildView();
+    ambiguate(WidgetsBinding.instance)?.addPostFrameCallback((timeStamp) {
+      getPosition();
+      scrollController.addListener(scrollListener);
     });
   }
 }
