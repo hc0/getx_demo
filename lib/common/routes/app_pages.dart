@@ -1,6 +1,7 @@
 import 'package:get/get.dart';
 import 'package:getx_demo/common/middleware/router_auth.dart';
 import 'package:getx_demo/page/anchor_scroller/page/custom_anchor_page.dart';
+import 'package:getx_demo/page/anchor_scroller/page/link_anchor_page.dart';
 import 'package:getx_demo/page/anchor_scroller/view.dart';
 import 'package:getx_demo/page/anchor_scroller/page/sliver_page.dart';
 import 'package:getx_demo/page/anchor_scroller/page/anchor_page.dart';
@@ -151,6 +152,11 @@ class AppPages {
     GetPage(
       name: Paths.customAnchor,
       page: () => const CustomAnchorPage(),
+      transition: Transition.cupertino,
+    ),
+    GetPage(
+      name: Paths.linkAnchor,
+      page: () => const LinkAnchorPage(),
       transition: Transition.cupertino,
     ),
   ];

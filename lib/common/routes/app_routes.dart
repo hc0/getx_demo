@@ -42,5 +42,6 @@ abstract class Paths {
   static const sliver = '/sliver';
   static const anchor = '/anchor';
   static const customAnchor = '/custom_anchor';
+  static const linkAnchor = '/link_anchor';
   static const scrollablePosition = '/scrollable_position';
 }

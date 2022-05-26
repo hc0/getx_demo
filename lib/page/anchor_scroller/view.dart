@@ -45,6 +45,12 @@ class _SliverPageState extends State<LinkPage> {
                 Get.toNamed(Paths.customAnchor);
               },
             ),
+            ElevatedButton(
+              child: const Text('link_anchor'),
+              onPressed: () {
+                Get.toNamed(Paths.linkAnchor);
+              },
+            ),
           ],
         ),
       ),

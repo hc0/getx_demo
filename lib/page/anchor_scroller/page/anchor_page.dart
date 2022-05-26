@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:getx_demo/common/widget/anchor_scroll_view/tw_anchor_scroll_view.dart';
+import 'package:getx_demo/common/widget/anchor_scroll/tw_anchor_scroll_view.dart';
 import 'package:getx_demo/page/anchor_scroller/widget/my_page_view.dart';
 import 'package:getx_demo/page/anchor_scroller/widget/title_bar_view.dart';
 import 'package:getx_demo/page/anchor_scroller/widget/tw_behavior.dart';

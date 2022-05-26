@@ -1,32 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:getx_demo/common/widget/link_anchor/widget_position_model.dart';
+import 'package:getx_demo/page/anchor_scroller/widget/my_page_view.dart';
 import 'package:getx_demo/page/anchor_scroller/widget/title_bar_view.dart';
-
-///控件位置-开始与结束
-class WidgetPosition {
-  //对应tab的下标
-  int index;
-
-  //开始位置-相对scroll起始位置
-  double begin;
-
-  //结束位置-相对scroll起始位置
-  double end;
-
-  //控件大小
-  Size size;
-
-  //控件顶部距离滚动视图底部的距离
-  double endToScrollEndHeight;
-
-  WidgetPosition({
-    required this.index,
-    required this.begin,
-    required this.end,
-    required this.size,
-    required this.endToScrollEndHeight,
-  });
-}
 
 ///自定义-锚点
 class CustomAnchorPage extends StatefulWidget {
@@ -170,21 +146,28 @@ class _CustomAnchorPageState extends State<CustomAnchorPage>
       child: Column(
         children: [
           ...List.generate(itemCount, (index) {
-            return Container(
-              key: globalKeys[index],
-              height: 200,
-              color: Colors.primaries[index],
-              child: Column(
-                children: [
-                  Text('Tilte ${index + 1}'),
-                  Expanded(
-                    child: Container(
-                      color: Colors.primaries[itemCount - index],
-                    ),
-                  )
-                ],
-              ),
-            );
+            if (index == 5) {
+              return MyPageView(
+                tabs: tabs,
+                key: globalKeys[index],
+              );
+            } else {
+              return Container(
+                key: globalKeys[index],
+                height: 200,
+                color: Colors.primaries[index],
+                child: Column(
+                  children: [
+                    Text('Tilte ${index + 1}'),
+                    Expanded(
+                      child: Container(
+                        color: Colors.primaries[itemCount - index],
+                      ),
+                    )
+                  ],
+                ),
+              );
+            }
           })
         ],
       ),
