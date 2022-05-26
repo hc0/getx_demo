@@ -58,7 +58,7 @@ class _CustomAnchorPageState extends State<CustomAnchorPage>
   late AnimationController animationController;
 
   ///子视图个数
-  int itemCount = 15;
+  int itemCount = 14;
 
   ///tab控制器
   late TabController tabController;
@@ -135,21 +135,29 @@ class _CustomAnchorPageState extends State<CustomAnchorPage>
 
   @override
   Widget build(BuildContext context) {
-    return Material(
-      child: Stack(
-        children: [
-          Positioned.fill(
-            child: scrollView(),
-          ),
-          TitleBarView(
-            animationController: animationController,
-            tabController: tabController,
-            tabs: tabs,
-            statusBarHeight: statusBarHeight,
-            titleHeight: titleHeight,
-            tabHeight: tabHeight,
-          ),
-        ],
+    return Scaffold(
+      body: LayoutBuilder(
+        builder: (BuildContext context, BoxConstraints constraints) {
+          return SizedBox(
+            width: constraints.maxWidth,
+            height: constraints.maxHeight,
+            child: Stack(
+              children: [
+                Positioned.fill(
+                  child: scrollView(),
+                ),
+                TitleBarView(
+                  animationController: animationController,
+                  tabController: tabController,
+                  tabs: tabs,
+                  statusBarHeight: statusBarHeight,
+                  titleHeight: titleHeight,
+                  tabHeight: tabHeight,
+                ),
+              ],
+            ),
+          );
+        },
       ),
     );
   }
@@ -202,11 +210,11 @@ class _CustomAnchorPageState extends State<CustomAnchorPage>
     for (int index = globalKeyLength - 1; index >= 0; index--) {
       RenderBox widgetRenderBox =
           globalKeys[index].currentContext?.findRenderObject() as RenderBox;
-      //控件大小
+      //子控件大小
       Size widgetSize = widgetRenderBox.size;
-      //相对于原点 控件的位置
+      //相对于原点-子控件的位置
       Offset widgetOffset = widgetRenderBox.localToGlobal(Offset.zero);
-
+      //子控件-开始与结束坐标
       double begin = widgetOffset.dy - scrollOffset.dy;
       double end = begin + widgetSize.height;
 
@@ -246,6 +254,7 @@ class _CustomAnchorPageState extends State<CustomAnchorPage>
 
   ///跳转对应位置
   void jumpTo(int index) {
+    //滚动锁
     if (scrollLock) return;
     scrollLock = true;
     //防止超出下标
@@ -256,16 +265,14 @@ class _CustomAnchorPageState extends State<CustomAnchorPage>
     if (temp.begin - toOffset <= 0) {
       //跳转至顶部-超出scroll最上方-重置为scroll最顶部
       jumpOffset = 0;
+    } else if (temp.endToScrollEndHeight + temp.size.height <
+        scrollSize.height - toOffset) {
+      //滚动过大-防止回弹
+      double toUpOffset =
+          scrollSize.height - temp.endToScrollEndHeight - temp.size.height;
+      jumpOffset -= toUpOffset;
     } else {
-      //跳转至底部
-      if (temp.endToScrollEndHeight + temp.size.height <
-          scrollSize.height - toOffset) {
-        double toUpOffset =
-            scrollSize.height - temp.endToScrollEndHeight - temp.size.height;
-        jumpOffset -= toUpOffset;
-      } else {
-        jumpOffset -= toOffset;
-      }
+      jumpOffset -= toOffset;
     }
     scrollController.jumpTo(jumpOffset);
     scrollLock = false;
