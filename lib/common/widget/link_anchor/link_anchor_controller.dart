@@ -20,34 +20,32 @@ class LinkAnchorController {
   ///子视图个数
   late int itemCount;
 
-  ///tab控制器
-  late TabController? tabController;
-
   ///子视图起始位置
   List<WidgetPosition> widgetPositions = [];
 
   ///滚动视图key
-  GlobalKey scrollGlobalKey = GlobalKey();
+  final GlobalKey scrollGlobalKey = GlobalKey();
 
   ///滚动控件大小
-  late Size scrollSize;
+  late Size _scrollSize;
 
   ///子视图key
-  late List<GlobalKey> globalKeys =
-      List.generate(itemCount, (index) => GlobalKey());
+  late List<GlobalKey> globalKeys;
 
   ///滚动控制器
-  late ScrollController scrollController =
-      scrollController = ScrollController()..addListener(scrollListener);
+  late ScrollController scrollController;
 
   ///对应tab的下标
-  WidgetPosition? currentToTabIndex;
+  int? _currentToTabIndex;
 
   ///定位时向下偏移量
   double get toOffset => offset;
 
   ///滚动锁-防止多次滚动计算
-  bool scrollLock = false;
+  bool _scrollLock = false;
+
+  ///上次滚动的位置
+  double _previousPixels = 0;
 
   ///动画回调
   AnimationNotification? animationNotification;
@@ -61,33 +59,28 @@ class LinkAnchorController {
   LinkAnchorController({
     this.initIndex = 0,
     this.offset = 0,
-    this.tabController,
     this.animationNotification,
     this.positionNotification,
     this.scrollNotification,
   });
 
-  ///页面显示后下一帧回调
-  void postFrameCallback(_) {
-    //获取子控件位置
-    _getPosition();
-    //设置初始值
-    _setInitIndex();
-  }
-
   ///滚动监听
   void scrollListener() {
     //通知外部
     _scrollNotification();
+
+    //记录滚动距离
+    _previousPixels = scrollController.position.pixels;
+
     //计算位置
-    if (!scrollLock) {
+    if (!_scrollLock) {
       //记录上次位置
-      WidgetPosition? tempTabIndex = currentToTabIndex;
+      int? tempTabIndex = _currentToTabIndex;
       //计算对应tab的下标位置
       _getCurrentToTabIndex(scrollController.position.pixels);
       //判断与上次是否同一个视图位置
-      if (tempTabIndex != currentToTabIndex) {
-        _toPositionNotification(currentToTabIndex!.index);
+      if (tempTabIndex != _currentToTabIndex) {
+        _toPositionNotification(_currentToTabIndex!);
       }
     }
 
@@ -114,17 +107,16 @@ class LinkAnchorController {
   }
 
   ///获取-子视图位置
-  void _getPosition() {
+  void getPosition() {
     //滚动视图
     RenderBox scrollRenderBox =
         scrollGlobalKey.currentContext!.findRenderObject() as RenderBox;
     //滚动视图-大小
-    scrollSize = scrollRenderBox.size;
+    _scrollSize = scrollRenderBox.size;
     //滚动视图-相对于原点 控件的位置
     Offset scrollOffset = scrollRenderBox.localToGlobal(Offset.zero);
 
     widgetPositions.clear();
-
     int globalKeyLength = globalKeys.length;
 
     //倒序遍历-为了计算控件距离scroll底部距离
@@ -136,8 +128,8 @@ class LinkAnchorController {
       Size widgetSize = widgetRenderBox.size;
       //相对于原点-子控件的位置
       Offset widgetOffset = widgetRenderBox.localToGlobal(Offset.zero);
-      //子控件-开始与结束坐标
-      double begin = widgetOffset.dy - scrollOffset.dy;
+      //子控件-开始与结束坐标(+previousPixels 是为了视图刷新时已经有滚动过了)
+      double begin = widgetOffset.dy - scrollOffset.dy + _previousPixels;
       double end = begin + widgetSize.height;
 
       widgetPositions.insert(
@@ -155,7 +147,7 @@ class LinkAnchorController {
   }
 
   ///设置初始值
-  void _setInitIndex() {
+  void setInitIndex() {
     if (initIndex == 0) return;
     jumpToIndex(initIndex);
     _toPositionNotification(initIndex);
@@ -166,16 +158,17 @@ class LinkAnchorController {
     //兼容顶部偏移量
     pixels += toOffset;
     //判断是否还是当前下标位置
-    if (currentToTabIndex != null) {
-      if (pixels > currentToTabIndex!.begin &&
-          pixels < currentToTabIndex!.end) {
+    if (_currentToTabIndex != null) {
+      WidgetPosition current = widgetPositions[_currentToTabIndex!];
+      if (pixels > current.begin && pixels < current.end) {
         return;
       }
     }
     //判断对应下标
-    for (var element in widgetPositions) {
+    for (int index = 0; index < widgetPositions.length; index++) {
+      WidgetPosition element = widgetPositions[index];
       if (pixels >= element.begin && pixels <= element.end) {
-        currentToTabIndex = element;
+        _currentToTabIndex = index;
         break;
       }
     }
@@ -189,8 +182,8 @@ class LinkAnchorController {
     Curve curve = Curves.linear,
   }) async {
     //滚动锁
-    if (scrollLock) return;
-    scrollLock = true;
+    if (_scrollLock) return;
+    _scrollLock = true;
     if (animated) {
       await scrollController.animateTo(
         offset,
@@ -200,7 +193,7 @@ class LinkAnchorController {
     } else {
       scrollController.jumpTo(offset);
     }
-    scrollLock = false;
+    _scrollLock = false;
   }
 
   ///跳转对应位置
@@ -211,8 +204,8 @@ class LinkAnchorController {
     Curve curve = Curves.linear,
   }) async {
     //滚动锁
-    if (scrollLock) return;
-    scrollLock = true;
+    if (_scrollLock) return;
+    _scrollLock = true;
     //防止超出下标
     index = index.clamp(0, itemCount - 1);
     WidgetPosition temp = widgetPositions[index];
@@ -222,10 +215,10 @@ class LinkAnchorController {
       //跳转至顶部-超出scroll最上方-重置为scroll最顶部
       jumpOffset = 0;
     } else if (temp.endToScrollEndHeight + temp.size.height <
-        scrollSize.height - toOffset) {
+        _scrollSize.height - toOffset) {
       //防止滚动距离过大而回弹
       double toUpOffset =
-          scrollSize.height - temp.endToScrollEndHeight - temp.size.height;
+          _scrollSize.height - temp.endToScrollEndHeight - temp.size.height;
       jumpOffset -= toUpOffset;
     } else {
       jumpOffset -= toOffset;
@@ -239,6 +232,6 @@ class LinkAnchorController {
     } else {
       scrollController.jumpTo(jumpOffset);
     }
-    scrollLock = false;
+    _scrollLock = false;
   }
 }

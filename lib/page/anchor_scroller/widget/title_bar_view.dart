@@ -9,6 +9,7 @@ class TitleBarView extends StatelessWidget {
   final TabController tabController;
   final double titleHeight;
   final double tabHeight;
+  final VoidCallback? shareTap;
 
   const TitleBarView({
     Key? key,
@@ -18,6 +19,7 @@ class TitleBarView extends StatelessWidget {
     required this.tabController,
     required this.titleHeight,
     required this.tabHeight,
+    this.shareTap,
   }) : super(key: key);
 
   //标题栏-图标颜色动画
@@ -84,7 +86,9 @@ class TitleBarView extends StatelessWidget {
             ),
           ),
           IconButton(
-            onPressed: () {},
+            onPressed: () {
+              shareTap?.call();
+            },
             icon: Icon(
               Icons.share,
               color: animationIconColor.value,

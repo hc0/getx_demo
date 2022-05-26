@@ -27,8 +27,7 @@ class _LinkAnchorPageState extends State<LinkAnchorPage>
   double get headerHeight => titleHeight + tabHeight + statusBarHeight;
 
   ///tab数据
-  List<String> get tabs =>
-      List.generate(itemCount, (index) => ' ${index + 1} ');
+  List<String> get tabs => List.generate(8, (index) => ' ${index + 1} ');
 
   ///动画控制器
   late AnimationController animationController;
@@ -44,31 +43,30 @@ class _LinkAnchorPageState extends State<LinkAnchorPage>
 
   late LinkAnchorController linkAnchorController;
 
+  bool toggle = false;
+
   @override
   void initState() {
     super.initState();
     //初始化-动画控制器
     animationController = AnimationController(vsync: this);
-    tabController = TabController(length: itemCount, vsync: this)
+    tabController = TabController(length: tabs.length, vsync: this)
       ..addListener(() {
         if (tabController.indexIsChanging) {
-          linkAnchorController.jumpToIndex(tabController.index);
+          int tempIndex = tabController.index.clamp(0, tabs.length);
+          linkAnchorController.jumpToIndex(tempIndex);
         }
       });
     linkAnchorController = LinkAnchorController(
-      initIndex: 4,
       offset: headerHeight,
       animationNotification: (double value) {
-        print('test animationNotification $value');
         animationController.value = value;
       },
       positionNotification: (int index) {
-        print('test positionNotification $index');
-        tabController.index = index;
+        int tempIndex = index.clamp(0, tabs.length);
+        tabController.index = tempIndex;
       },
-      scrollNotification: (scrollController) {
-        print('test ${scrollController.position.pixels}');
-      },
+      scrollNotification: (scrollController) {},
     );
   }
 
@@ -87,7 +85,17 @@ class _LinkAnchorPageState extends State<LinkAnchorPage>
                     controller: linkAnchorController,
                     itemCount: 10,
                     build: (BuildContext context, int index) {
-                      if (index == 5) {
+                      if (index == 0) {
+                        return AnimatedContainer(
+                          height: toggle ? 400 : 600,
+                          color: toggle
+                              ? Colors.primaries[index]
+                              : Colors.primaries.reversed.toList()[index],
+                          alignment: Alignment.center,
+                          duration: const Duration(milliseconds: 300),
+                          child: Text(toggle ? '我是图片' : '我是视频'),
+                        );
+                      } else if (index == 5) {
                         return MyPageView(tabs: tabs);
                       } else {
                         return Container(
@@ -115,6 +123,11 @@ class _LinkAnchorPageState extends State<LinkAnchorPage>
                   statusBarHeight: statusBarHeight,
                   titleHeight: titleHeight,
                   tabHeight: tabHeight,
+                  shareTap: () {
+                    setState(() {
+                      toggle = !toggle;
+                    });
+                  },
                 ),
               ],
             ),

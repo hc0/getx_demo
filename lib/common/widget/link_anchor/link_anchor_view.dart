@@ -28,9 +28,19 @@ class _LinkAnchorViewState extends State<LinkAnchorView> {
     super.initState();
     controller = widget.controller ?? LinkAnchorController();
     controller.itemCount = widget.itemCount;
+    controller.globalKeys =
+        List.generate(controller.itemCount, (index) => GlobalKey());
+
+    controller.scrollController = ScrollController()
+      ..addListener(controller.scrollListener);
 
     //下一贞的回调事件
-    WidgetsBinding.instance?.addPostFrameCallback(controller.postFrameCallback);
+    WidgetsBinding.instance?.addPostFrameCallback((_) {
+      //获取子控件位置
+      controller.getPosition();
+      //设置初始值
+      controller.setInitIndex();
+    });
   }
 
   @override
@@ -67,6 +77,21 @@ class _LinkAnchorViewState extends State<LinkAnchorView> {
         );
       },
     );
+  }
+
+  @override
+  void didUpdateWidget(covariant LinkAnchorView oldWidget) {
+    super.didUpdateWidget(oldWidget);
+
+
+    controller.scrollController.removeListener(controller.scrollListener);
+    controller.globalKeys =
+        List.generate(widget.itemCount, (index) => GlobalKey());
+    setState(() {});
+    WidgetsBinding.instance?.addPostFrameCallback((timeStamp) {
+      controller.getPosition();
+      controller.scrollController.addListener(controller.scrollListener);
+    });
   }
 
   @override
