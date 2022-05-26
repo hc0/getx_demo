@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:getx_demo/common/services/global_service.dart';
 import 'package:getx_demo/common/widget/link_anchor/widget_position_model.dart';
 import 'package:getx_demo/page/anchor_scroller/widget/my_page_view.dart';
 import 'package:getx_demo/page/anchor_scroller/widget/title_bar_view.dart';
@@ -63,6 +64,8 @@ class _CustomAnchorPageState extends State<CustomAnchorPage>
   ///滚动锁-防止多次滚动计算
   bool scrollLock = false;
 
+  ValueNotifier<double> valueNotifier = ValueNotifier(200.0);
+
   @override
   void initState() {
     super.initState();
@@ -103,7 +106,7 @@ class _CustomAnchorPageState extends State<CustomAnchorPage>
         animationController.value = temp;
       });
     //下一贞的回调事件
-    WidgetsBinding.instance?.addPostFrameCallback((timeStamp) {
+    ambiguate(WidgetsBinding.instance)?.addPostFrameCallback((timeStamp) {
       //获取子控件位置
       getPosition();
     });
@@ -129,6 +132,9 @@ class _CustomAnchorPageState extends State<CustomAnchorPage>
                   statusBarHeight: statusBarHeight,
                   titleHeight: titleHeight,
                   tabHeight: tabHeight,
+                  shareTap: (){
+                    valueNotifier.value=300;
+                  },
                 ),
               ],
             ),
@@ -148,6 +154,7 @@ class _CustomAnchorPageState extends State<CustomAnchorPage>
           ...List.generate(itemCount, (index) {
             if (index == 5) {
               return MyPageView(
+                valueNotifier: valueNotifier,
                 tabs: tabs,
                 key: globalKeys[index],
               );

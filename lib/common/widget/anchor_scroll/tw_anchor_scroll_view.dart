@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:getx_demo/common/services/global_service.dart';
 import 'tw_anchor_scroll_view_controller.dart';
 export 'tw_anchor_scroll_view_controller.dart';
 
@@ -77,7 +78,7 @@ class _BrnScrollAnchorTabWidgetState extends State<TWAnchorScrollView>
     // fillKeyList();
     // fillList();
 
-    WidgetsBinding.instance!.addPostFrameCallback((da) {
+    ambiguate(WidgetsBinding.instance)!.addPostFrameCallback((da) {
       scrollController.addListener(() {
         final _scrollingListener = widget.controller.scrollingListener;
         if (_scrollingListener != null) {
@@ -97,7 +98,7 @@ class _BrnScrollAnchorTabWidgetState extends State<TWAnchorScrollView>
   Widget build(BuildContext context) {
     fillList();
 
-    WidgetsBinding.instance!.addPostFrameCallback((da) {
+    ambiguate(WidgetsBinding.instance)?.addPostFrameCallback((da) {
       fillOffset();
     });
     return SingleChildScrollView(

@@ -176,7 +176,7 @@ class _MyPageState extends State<MyPage> {
   void initState() {
     widget.logic?.onInit();
     super.initState();
-    WidgetsBinding.instance?.addPostFrameCallback((timeStamp) {
+    ambiguate(WidgetsBinding.instance)?.addPostFrameCallback((timeStamp) {
       widget.logic?.onReady();
     });
   }

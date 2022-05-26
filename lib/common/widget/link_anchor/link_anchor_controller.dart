@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:getx_demo/common/services/global_service.dart';
 import 'package:getx_demo/common/widget/link_anchor/widget_position_model.dart';
 
 ///动画通知-用于滚动外的视图动画联动
@@ -14,7 +15,7 @@ class LinkAnchorController {
   ///默认值
   final int initIndex;
 
-  ///偏移量
+  ///定位时向下偏移量
   final double offset;
 
   ///子视图个数
@@ -38,9 +39,6 @@ class LinkAnchorController {
   ///对应tab的下标
   int? _currentToTabIndex;
 
-  ///定位时向下偏移量
-  double get toOffset => offset;
-
   ///滚动锁-防止多次滚动计算
   bool _scrollLock = false;
 
@@ -55,6 +53,9 @@ class LinkAnchorController {
 
   ///滚动通知
   ScrollNotification? scrollNotification;
+
+  ///更新树
+  late VoidCallback reBuildView;
 
   LinkAnchorController({
     this.initIndex = 0,
@@ -144,6 +145,11 @@ class LinkAnchorController {
       );
       tempHeight += widgetSize.height;
     }
+
+    widgetPositions.forEach((element) {
+      print(
+          'test begin=${element.begin} end=${element.end} endToScrollEndHeight=${element.endToScrollEndHeight}');
+    });
   }
 
   ///设置初始值
@@ -156,7 +162,7 @@ class LinkAnchorController {
   ///获取-对应tab的下标
   void _getCurrentToTabIndex(double pixels) {
     //兼容顶部偏移量
-    pixels += toOffset;
+    pixels += offset;
     //判断是否还是当前下标位置
     if (_currentToTabIndex != null) {
       WidgetPosition current = widgetPositions[_currentToTabIndex!];
@@ -211,17 +217,17 @@ class LinkAnchorController {
     WidgetPosition temp = widgetPositions[index];
     //对应位置的视图y坐标 + 向下的偏移量
     double jumpOffset = temp.begin;
-    if (temp.begin - toOffset <= 0) {
+    if (temp.begin - offset <= 0) {
       //跳转至顶部-超出scroll最上方-重置为scroll最顶部
       jumpOffset = 0;
     } else if (temp.endToScrollEndHeight + temp.size.height <
-        _scrollSize.height - toOffset) {
+        _scrollSize.height - offset) {
       //防止滚动距离过大而回弹
       double toUpOffset =
           _scrollSize.height - temp.endToScrollEndHeight - temp.size.height;
       jumpOffset -= toUpOffset;
     } else {
-      jumpOffset -= toOffset;
+      jumpOffset -= offset;
     }
     if (animated) {
       await scrollController.animateTo(
@@ -233,5 +239,20 @@ class LinkAnchorController {
       scrollController.jumpTo(jumpOffset);
     }
     _scrollLock = false;
+  }
+
+  ///更新视图并重新计算(内部控件高度有变化需要重新计算)
+  ///duration：内容控件高度变化可能有动画，在动画结束后在计算
+  void updateAndCalculate({Duration duration = Duration.zero}) {
+    //延迟作用：内容控件高度变化可能有动画，在动画结束后在计算
+    Future.delayed(duration, () {
+      scrollController.removeListener(scrollListener);
+      globalKeys = List.generate(itemCount, (index) => GlobalKey());
+      reBuildView();
+      ambiguate(WidgetsBinding.instance)?.addPostFrameCallback((timeStamp) {
+        getPosition();
+        scrollController.addListener(scrollListener);
+      });
+    });
   }
 }

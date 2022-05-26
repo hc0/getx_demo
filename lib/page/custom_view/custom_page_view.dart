@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:getx_demo/common/services/global_service.dart';
 import 'package:getx_demo/page/custom_view/page_view_footer.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
@@ -33,7 +34,7 @@ class _CustomPageViewState extends State<CustomPageView>
     itemCount = widget.itemCount;
     super.initState();
 
-    WidgetsBinding.instance?.addPostFrameCallback((timeStamp) {
+    ambiguate(WidgetsBinding.instance)?.addPostFrameCallback((timeStamp) {
       scrollController.jumpTo(constraints.maxWidth * (itemCount - 1));
     });
   }

@@ -45,6 +45,8 @@ class _LinkAnchorPageState extends State<LinkAnchorPage>
 
   bool toggle = false;
 
+  ValueNotifier<double> valueNotifier = ValueNotifier<double>(200.0);
+
   @override
   void initState() {
     super.initState();
@@ -96,7 +98,10 @@ class _LinkAnchorPageState extends State<LinkAnchorPage>
                           child: Text(toggle ? '我是图片' : '我是视频'),
                         );
                       } else if (index == 5) {
-                        return MyPageView(tabs: tabs);
+                        return MyPageView(
+                          tabs: tabs,
+                          valueNotifier: valueNotifier,
+                        );
                       } else {
                         return Container(
                           height: 200,
@@ -127,6 +132,8 @@ class _LinkAnchorPageState extends State<LinkAnchorPage>
                     setState(() {
                       toggle = !toggle;
                     });
+                    valueNotifier.value = 400;
+                    linkAnchorController.updateAndCalculate();
                   },
                 ),
               ],

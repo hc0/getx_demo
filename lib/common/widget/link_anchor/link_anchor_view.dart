@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:getx_demo/common/services/global_service.dart';
 import 'package:getx_demo/common/widget/link_anchor/link_anchor_controller.dart';
 
 typedef LinkAnchorBuild = Widget Function(BuildContext context, int index);
@@ -27,6 +28,8 @@ class _LinkAnchorViewState extends State<LinkAnchorView> {
   void initState() {
     super.initState();
     controller = widget.controller ?? LinkAnchorController();
+    controller.reBuildView = reBuildView;
+
     controller.itemCount = widget.itemCount;
     controller.globalKeys =
         List.generate(controller.itemCount, (index) => GlobalKey());
@@ -35,7 +38,7 @@ class _LinkAnchorViewState extends State<LinkAnchorView> {
       ..addListener(controller.scrollListener);
 
     //下一贞的回调事件
-    WidgetsBinding.instance?.addPostFrameCallback((_) {
+    ambiguate(WidgetsBinding.instance)?.addPostFrameCallback((_) {
       //获取子控件位置
       controller.getPosition();
       //设置初始值
@@ -82,16 +85,11 @@ class _LinkAnchorViewState extends State<LinkAnchorView> {
   @override
   void didUpdateWidget(covariant LinkAnchorView oldWidget) {
     super.didUpdateWidget(oldWidget);
+    controller.updateAndCalculate();
+  }
 
-
-    controller.scrollController.removeListener(controller.scrollListener);
-    controller.globalKeys =
-        List.generate(widget.itemCount, (index) => GlobalKey());
-    setState(() {});
-    WidgetsBinding.instance?.addPostFrameCallback((timeStamp) {
-      controller.getPosition();
-      controller.scrollController.addListener(controller.scrollListener);
-    });
+  void reBuildView() {
+    if (mounted) setState(() {});
   }
 
   @override

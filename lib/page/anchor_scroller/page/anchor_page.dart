@@ -43,6 +43,8 @@ class _TwAnchorPageState extends State<TwAnchorPage>
 
   GlobalKey globalKey = GlobalKey();
 
+  ValueNotifier<double> valueNotifier = ValueNotifier<double>(200.0);
+
   @override
   void initState() {
     super.initState();
@@ -83,6 +85,9 @@ class _TwAnchorPageState extends State<TwAnchorPage>
             statusBarHeight: statusBarHeight,
             titleHeight: titleHeight,
             tabHeight: tabHeight,
+            shareTap: () {
+              valueNotifier.value = 400;
+            },
           ),
         ],
       ),
@@ -98,6 +103,7 @@ class _TwAnchorPageState extends State<TwAnchorPage>
         itemBuilder: (BuildContext context, int index) {
           if (index == 5) {
             return MyPageView(
+              valueNotifier: valueNotifier,
               tabs: tabs,
               key: globalKey,
             );
