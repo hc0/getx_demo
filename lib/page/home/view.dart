@@ -86,6 +86,18 @@ class HomePage extends StatelessWidget {
                 AppRouter.share.open(Paths.scrollView);
               },
             ),
+            ElevatedButton(
+              child: const Text('筛选功能'),
+              onPressed: () {
+                Get.toNamed(Paths.screening);
+              },
+            ),
+            // ElevatedButton(
+            //   child: const Text('状态管理'),
+            //   onPressed: () {
+            //     Get.toNamed(Paths.getState, arguments: {'pageNumber': 1});
+            //   },
+            // ),
           ],
         ),
       ),
