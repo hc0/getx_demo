@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:getx_demo/common/services/global_service.dart';
 import 'package:getx_demo/common/widget/link_anchor/link_anchor_controller.dart';
 
@@ -31,8 +32,6 @@ class _LinkAnchorViewState extends State<LinkAnchorView> {
     controller.reBuildView = reBuildView;
 
     controller.itemCount = widget.itemCount;
-    controller.globalKeys =
-        List.generate(controller.itemCount, (index) => GlobalKey());
 
     controller.scrollController = ScrollController()
       ..addListener(controller.scrollListener);
@@ -80,20 +79,6 @@ class _LinkAnchorViewState extends State<LinkAnchorView> {
         );
       },
     );
-  }
-
-  @override
-  void didUpdateWidget(covariant LinkAnchorView oldWidget) {
-    if (oldWidget.controller != widget.controller) {
-      controller = widget.controller ?? LinkAnchorController();
-      controller.reBuildView = reBuildView;
-      controller.itemCount = widget.itemCount;
-    } else if (oldWidget.itemCount != widget.itemCount) {
-      controller.itemCount = widget.itemCount;
-    }
-
-    super.didUpdateWidget(oldWidget);
-    controller.updateAndCalculate(didUpdate: true);
   }
 
   void reBuildView() {

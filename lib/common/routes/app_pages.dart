@@ -10,12 +10,14 @@ import 'package:getx_demo/page/filter/filter_page.dart';
 import 'package:getx_demo/page/goods_detail/view.dart';
 import 'package:getx_demo/page/goods_list/view.dart';
 import 'package:getx_demo/page/home/view.dart';
+import 'package:getx_demo/page/link_scrollview/link_scrollview_page.dart';
 import 'package:getx_demo/page/login/view.dart';
 import 'package:getx_demo/page/main/view.dart';
 import 'package:getx_demo/page/mine/view.dart';
 import 'package:getx_demo/page/order_detail/view.dart';
 import 'package:getx_demo/page/order_list/view.dart';
 import 'package:getx_demo/page/router/page_number.dart';
+import 'package:getx_demo/page/scroll_view/view.dart';
 import 'package:getx_demo/page/setting/view.dart';
 import 'package:getx_demo/page/shopping_cart/view.dart';
 import 'package:getx_demo/page/state/view.dart';
@@ -157,6 +159,16 @@ class AppPages {
     GetPage(
       name: Paths.linkAnchor,
       page: () => const LinkAnchorPage(),
+      transition: Transition.cupertino,
+    ),
+    GetPage(
+      name: Paths.linkScrollView,
+      page: () => const LinkScrollViewPage(),
+      transition: Transition.cupertino,
+    ),
+    GetPage(
+      name: Paths.scrollView,
+      page: () => ScrollViewPage(),
       transition: Transition.cupertino,
     ),
   ];

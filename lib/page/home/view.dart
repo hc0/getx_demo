@@ -74,6 +74,18 @@ class HomePage extends StatelessWidget {
                 AppRouter.share.open(Paths.link);
               },
             ),
+            ElevatedButton(
+              child: const Text('滚动联动'),
+              onPressed: () {
+                AppRouter.share.open(Paths.linkScrollView);
+              },
+            ),
+            ElevatedButton(
+              child: const Text('滚动学习'),
+              onPressed: () {
+                AppRouter.share.open(Paths.scrollView);
+              },
+            ),
           ],
         ),
       ),

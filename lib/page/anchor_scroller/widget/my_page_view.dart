@@ -37,7 +37,6 @@ class MyPageView extends StatelessWidget {
               );
             },
             itemCount: tabs.length,
-            // pagination: DotSwiperPaginationBuilder(),
             outer: true,
             itemWidth: 0.5.sw,
             layout: SwiperLayout.STACK,

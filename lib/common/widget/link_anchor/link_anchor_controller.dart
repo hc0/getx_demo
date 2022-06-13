@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:getx_demo/common/services/global_service.dart';
 import 'package:getx_demo/common/widget/link_anchor/widget_position_model.dart';
 
@@ -144,6 +145,9 @@ class LinkAnchorController {
         ),
       );
       tempHeight += widgetSize.height;
+
+      print(
+          'test index=$index tempHeight=$tempHeight currentHeight=${widgetSize.height} scrollMaxHeight=${scrollController.position.maxScrollExtent}');
     }
   }
 

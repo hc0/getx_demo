@@ -44,4 +44,6 @@ abstract class Paths {
   static const customAnchor = '/custom_anchor';
   static const linkAnchor = '/link_anchor';
   static const scrollablePosition = '/scrollable_position';
+  static const linkScrollView = '/link_scrollview';
+  static const scrollView = '/scroll_view';
 }

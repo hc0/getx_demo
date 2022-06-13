@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:getx_demo/common/widget/link_anchor/link_anchor_controller.dart';
 import 'package:getx_demo/common/widget/link_anchor/link_anchor_view.dart';
-import 'package:getx_demo/page/anchor_scroller/widget/my_page_view.dart';
 import 'package:getx_demo/page/anchor_scroller/widget/title_bar_view.dart';
 
 class LinkAnchorPage extends StatefulWidget {
@@ -45,7 +45,9 @@ class _LinkAnchorPageState extends State<LinkAnchorPage>
 
   bool toggle = false;
 
-  ValueNotifier<double> valueNotifier = ValueNotifier<double>(200.0);
+  ValueNotifier<bool> itemNotifier = ValueNotifier<bool>(false);
+
+  PageController pageController = PageController();
 
   @override
   void initState() {
@@ -65,7 +67,7 @@ class _LinkAnchorPageState extends State<LinkAnchorPage>
         animationController.value = value;
       },
       positionNotification: (int index) {
-        int tempIndex = index.clamp(0, tabs.length-1);
+        int tempIndex = index.clamp(0, tabs.length - 1);
         tabController.index = tempIndex;
       },
       scrollNotification: (scrollController) {},
@@ -88,19 +90,39 @@ class _LinkAnchorPageState extends State<LinkAnchorPage>
                     itemCount: 15,
                     build: (BuildContext context, int index) {
                       if (index == 0) {
-                        return AnimatedContainer(
-                          height: toggle ? 400 : 600,
-                          color: toggle
-                              ? Colors.primaries[index]
-                              : Colors.primaries.reversed.toList()[index],
-                          alignment: Alignment.center,
-                          duration: const Duration(milliseconds: 500),
-                          child: Text(toggle ? '我是图片' : '我是视频'),
-                        );
-                      } else if (index == 5) {
-                        return MyPageView(
-                          tabs: tabs,
-                          valueNotifier: valueNotifier,
+                        return ValueListenableBuilder<bool>(
+                          valueListenable: itemNotifier,
+                          builder: (
+                            BuildContext context,
+                            value,
+                            Widget? child,
+                          ) {
+                            return AnimatedContainer(
+                              height: value ? 400 : 600,
+                              color: value
+                                  ? Colors.primaries[index]
+                                  : Colors.primaries.reversed.toList()[index],
+                              alignment: Alignment.center,
+                              duration: const Duration(milliseconds: 500),
+                              child: PageView(
+                                controller: pageController,
+                                scrollDirection: Axis.vertical,
+                                physics: const NeverScrollableScrollPhysics(),
+                                children: [
+                                  Container(
+                                    color: Colors.green,
+                                    alignment: Alignment.center,
+                                    child: const Text('我是图片1'),
+                                  ),
+                                  Container(
+                                    color: Colors.blue,
+                                    alignment: Alignment.center,
+                                    child: const Text('我是视频'),
+                                  ),
+                                ],
+                              ),
+                            );
+                          },
                         );
                       } else {
                         return Container(
@@ -128,10 +150,8 @@ class _LinkAnchorPageState extends State<LinkAnchorPage>
                   statusBarHeight: statusBarHeight,
                   titleHeight: titleHeight,
                   tabHeight: tabHeight,
-                  shareTap: () {
-                    toggle = !toggle;
-                    setState(() {});
-                    // valueNotifier.value = 400;
+                  shareTap: () async {
+                    itemNotifier.value = !itemNotifier.value;
                     // linkAnchorController.updateAndCalculate();
                   },
                 ),
@@ -147,6 +167,24 @@ class _LinkAnchorPageState extends State<LinkAnchorPage>
   void dispose() {
     tabController.dispose();
     animationController.dispose();
+    pageController.dispose();
     super.dispose();
+  }
+
+  RenderViewport? findViewport(BuildContext? context) {
+    if (context == null) {
+      return null;
+    }
+    RenderViewport? result;
+    context.visitChildElements((Element e) {
+      final RenderObject? renderObject = e.findRenderObject();
+      if (renderObject is RenderViewport) {
+        assert(result == null);
+        result = renderObject;
+      } else {
+        result = findViewport(e);
+      }
+    });
+    return result;
   }
 }

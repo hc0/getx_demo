@@ -168,7 +168,6 @@ class AppRouter extends RouteObserver<Route> with WidgetsBindingObserver{
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    print('test 00000');
     super.didChangeAppLifecycleState(state);
     if (state == AppLifecycleState.resumed) {
       print('test NavigatorObserver resumed');
